@@ -1,0 +1,40 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinations": [
+        {
+            "name": "multi-container-client",
+            "image": "ayuraj/multi-container-client",
+            "hostname": "client",
+            "essential": false,
+            "memory": 128
+        },
+        {
+            "name": "multi-container-server",
+            "image": "ayuraj/multi-container-server",
+            "hostname": "api",
+            "essential": false,
+            "memory": 128
+        },
+        {
+            "name": "multi-container-worker",
+            "image": "ayuraj/multi-container-worker",
+            "hostname": "worker",
+            "essential": false,
+            "memory": 128
+        },
+        {
+            "name": "multi-container-nginx",
+            "image": "ayuraj/multi-container-nginx",
+            "hostname": "nginx",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort":80,
+                    "containerPort":80
+                }
+            ],
+            "links":["multi-container-client","multi-container-server"],
+            "memory": 128
+        }
+    ]
+}
