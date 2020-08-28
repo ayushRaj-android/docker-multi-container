@@ -1,0 +1,25 @@
+language: generic 
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t ayuraj/docker-multi-container -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true ayuraj/docker-multi-container npm run test
+
+after_success:
+    - docker build -t ayuraj/multi-container-client ./client
+    - docker build -t ayuraj/multi-container-nginx ./nginx
+    - docker build -t ayuraj/multi-container-server ./server
+    - docker build -t ayuraj/multi-container-worker ./worker
+
+    #Login to docker hub
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    #Take those images and push to docker hub
+    - docker push ayuraj/multi-container-client
+    - docker push ayuraj/multi-container-nginx
+    - docker push ayuraj/multi-container-server
+    - docker push ayuraj/multi-container-worker
+
